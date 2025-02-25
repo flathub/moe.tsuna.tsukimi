@@ -1,23 +1,23 @@
 id: moe.tsuna.tsukimi
 runtime: org.gnome.Platform
-runtime-version: "47"
+runtime-version: '47'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
   - org.freedesktop.Sdk.Extension.llvm18
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
-    version: "24.08"
+    version: '24.08'
     directory: lib/ffmpeg
     add-ld-path: .
 command: tsukimi
 finish-args:
-  - "--device=dri"
-  - "--share=ipc"
-  - "--share=network"
-  - "--socket=fallback-x11"
-  - "--socket=wayland"
-  - "--socket=pulseaudio"
+  - --device=dri
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
 cleanup:
   - /include
   - /lib/pkconfig
@@ -26,28 +26,28 @@ cleanup:
   - /share/man
   - /share/doc
   - /share/pkgconfig
-  - "*.la"
-  - "*.a"
+  - '*.la'
+  - '*.a'
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 build-options:
-  append-path: "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm18/bin"
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm18/bin
   env:
     CARGO_HOME: /run/build/tsukimi/cargo
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
     CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER: clang
-    CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "-C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold"
+    CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS: -C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: clang
-    CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "-C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold"
+    CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: -C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold
     # Workaround for linkers
-    RUSTFLAGS: "-L /app/lib"
+    RUSTFLAGS: -L /app/lib
 
 modules:
   - name: tsukimi
     buildsystem: meson
     sources:
       - type: git
-        url: "https://github.com/tsukinaha/tsukimi.git"
+        url: https://github.com/tsukinaha/tsukimi.git
         commit: 65b513b1fddad58f6170961ae6ad1561c628ee69
         # Checker will be enabled once the upstream gets a new release tag
         # x-checker-data:
@@ -87,11 +87,11 @@ modules:
               is-important: true
 
         modules:
-          - "shared-modules/lua5.1/lua-5.1.5.json"
+          - shared-modules/lua5.1/lua-5.1.5.json
 
           - name: nv-codec-headers
             cleanup:
-              - "*"
+              - '*'
             no-autogen: true
             make-install-args:
               - PREFIX=/app
@@ -116,8 +116,8 @@ modules:
               - /lib/*.la
             sources:
               - type: archive
-                url: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-0.7.10+release.autotools.tar.gz
-                sha256: 093713c1c1024f4f10c4779a66ceb2af51fb7c908a9e99feb892d04019220ba1
+                url: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-0.7.13+release.autotools.tar.gz
+                sha256: dcd7cde4f9c498eb496c4556e1c1b81353e2a74747e8270a42565117ea42e1f1
                 x-checker-data:
                   type: anitya
                   project-id: 141468
