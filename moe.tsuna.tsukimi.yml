@@ -52,7 +52,8 @@ modules:
         x-checker-data:
           type: git
           version-scheme: semantic
-          tag-pattern: "^v([\\d.]+)$"
+          tag-pattern: ^v([\d.]+)$
+        commit: bd3b28d07f7cf2e5cbecb20a70e9f990af2fc0fb
       - cargo-sources.json
       - type: shell
         commands:
