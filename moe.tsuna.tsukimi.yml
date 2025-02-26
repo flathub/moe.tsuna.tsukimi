@@ -104,26 +104,6 @@ modules:
                   type: git
                   tag-pattern: ^n([\d.]+)$
 
-          - name: libopenmpt
-            config-opts:
-              - --disable-static
-              - --disable-tests
-              - --disable-examples
-              - --disable-openmpt123
-              - --disable-doxygen-doc
-              - --without-portaudio
-            cleanup:
-              - /lib/*.la
-            sources:
-              - type: archive
-                url: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-0.7.13+release.autotools.tar.gz
-                sha256: dcd7cde4f9c498eb496c4556e1c1b81353e2a74747e8270a42565117ea42e1f1
-                x-checker-data:
-                  type: anitya
-                  project-id: 141468
-                  stable-only: true
-                  url-template: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-$version+release.autotools.tar.gz
-
           - name: libass
             cleanup:
               - /lib/*.la
@@ -196,6 +176,8 @@ modules:
 
           - name: libplacebo
             buildsystem: meson
+            config-opts:
+              - -Dglslang=enabled
             sources:
               - type: git
                 url: https://github.com/haasn/libplacebo.git
