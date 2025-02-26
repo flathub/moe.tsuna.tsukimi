@@ -48,12 +48,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/tsukinaha/tsukimi.git
-        commit: 65b513b1fddad58f6170961ae6ad1561c628ee69
-        # Checker will be enabled once the upstream gets a new release tag
-        # x-checker-data:
-        #   type: git
-        #   version-scheme: semantic
-        #   tag-pattern: "^v([\\d.]+)$"
+        tag: v0.19.4
+        x-checker-data:
+          type: git
+          version-scheme: semantic
+          tag-pattern: "^v([\\d.]+)$"
       - cargo-sources.json
       - type: shell
         commands:
