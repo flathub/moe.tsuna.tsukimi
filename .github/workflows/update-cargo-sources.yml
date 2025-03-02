@@ -1,0 +1,37 @@
+name: Update Cargo sources
+
+on: [pull_request]
+
+jobs:
+  update-sources:
+    runs-on: ubuntu-latest
+    if: github.actor == 'flathubbot'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          submodules: true
+
+      - name: Retrieve tag from manifest
+        id: manifestTagVersion
+        run: |
+          echo "TAG_VERSION=$(yq '.modules[0].sources[0].tag' moe.tsuna.tsukimi.yml)" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v3
+        with:
+          path: tsukimi
+          repository: tsukinaha/tsukimi
+          ref: ${{ steps.manifestTagVersion.outputs.TAG_VERSION }}
+
+      - name: Update cargo-sources.json
+        run: |
+          sudo apt-get update -y && sudo apt-get install -y python3-aiohttp python3-toml
+          python3 flatpak-builder-tools/cargo/flatpak-cargo-generator.py tsukimi/Cargo.lock -o cargo-sources.json 
+          rm -rf tsukimi
+          [[ ! $(git status --porcelain) ]] && exit 0
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add cargo-sources.json
+          git commit -m 'Update cargo-sources.json'
+          git push
