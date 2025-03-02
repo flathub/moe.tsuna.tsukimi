@@ -49,19 +49,19 @@ modules:
       - type: git
         url: https://github.com/tsukinaha/tsukimi.git
         tag: v0.19.4
+        commit: bd3b28d07f7cf2e5cbecb20a70e9f990af2fc0fb
         x-checker-data:
           type: git
           version-scheme: semantic
           tag-pattern: ^v([\d.]+)$
-        commit: bd3b28d07f7cf2e5cbecb20a70e9f990af2fc0fb
       - cargo-sources.json
       - type: shell
         commands:
           - mkdir .cargo
           - cp cargo/config .cargo/
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
-    modules:
 
+    modules:
       - name: libmpv
         cleanup:
           - /share/applications
