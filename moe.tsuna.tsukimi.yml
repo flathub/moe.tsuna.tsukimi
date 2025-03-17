@@ -48,8 +48,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/tsukinaha/tsukimi.git
-        tag: v0.19.4
-        commit: bd3b28d07f7cf2e5cbecb20a70e9f990af2fc0fb
+        tag: v0.20.0
+        commit: c929c3047d2d1f0bff288bf9300941cb3f269fe4
         x-checker-data:
           type: git
           version-scheme: semantic
