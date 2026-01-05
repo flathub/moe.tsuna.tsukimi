@@ -1,13 +1,13 @@
 id: moe.tsuna.tsukimi
 runtime: org.gnome.Platform
-runtime-version: '49'
+runtime-version: "49"
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
-  - org.freedesktop.Sdk.Extension.llvm20
+  - org.freedesktop.Sdk.Extension.llvm21
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
-    version: '24.08'
+    version: "25.08"
     directory: lib/ffmpeg
     add-ld-path: .
 command: tsukimi
@@ -26,12 +26,12 @@ cleanup:
   - /share/man
   - /share/doc
   - /share/pkgconfig
-  - '*.la'
-  - '*.a'
+  - "*.la"
+  - "*.a"
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 build-options:
-  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm20/bin
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm21/bin
   env:
     CARGO_HOME: /run/build/tsukimi/cargo
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
@@ -77,8 +77,8 @@ modules:
           - -Dlua=enabled
         sources:
           - type: archive
-            url: https://github.com/mpv-player/mpv/archive/v0.40.0.tar.gz
-            sha256: 10a0f4654f62140a6dd4d380dcf0bbdbdcf6e697556863dc499c296182f081a3
+            url: https://github.com/mpv-player/mpv/archive/v0.41.0.tar.gz
+            sha256: ee21092a5ee427353392360929dc64645c54479aefdb5babc5cfbb5fad626209
             x-checker-data:
               type: anitya
               project-id: 5348
@@ -91,7 +91,7 @@ modules:
 
           - name: nv-codec-headers
             cleanup:
-              - '*'
+              - "*"
             no-autogen: true
             make-install-args:
               - PREFIX=/app
@@ -124,6 +124,7 @@ modules:
             config-opts:
               - -DCMAKE_BUILD_TYPE=Release
               - -DBUILD_STATIC=0
+              - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
             cleanup:
               - /bin
               - /lib/cmake
@@ -139,8 +140,6 @@ modules:
 
           - name: rubberband
             buildsystem: meson
-            config-opts:
-              - -Ddefault_library=shared
             cleanup:
               - /bin
               - /lib/ladspa
@@ -155,29 +154,41 @@ modules:
                   url-template: https://breakfastquay.com/files/releases/rubberband-$version.tar.bz2
 
           - name: mujs
-            cleanup:
-              - /bin
-              - /lib/libmujs.a
+            buildsystem: autotools
             no-autogen: true
             make-args:
               - release
-              - prefix=/app
             make-install-args:
               - prefix=/app
               - install-shared
+            cleanup:
+              - /bin
+              - /include
+              - /lib/pkgconfig
+              - /lib/libmujs.a
             sources:
               - type: git
-                url: https://github.com/ccxvii/mujs
-                tag: 1.3.6
-                commit: cc569c5fa9a7a2498177693b5617605c2ff5b260
+                url: https://codeberg.org/ccxvii/mujs
+                tag: 1.3.8
+                commit: 307f18c4216420f2f56e22d8e7040baa39a6304a
                 x-checker-data:
                   type: git
                   tag-pattern: ^([\d.]+)$
+              - type: file
+                url: https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt
+                sha256: ff58e5823bd095166564a006e47d111130813dcf8bf234ef79fa51a870edb48f
+              - type: file
+                url: https://www.unicode.org/Public/16.0.0/ucd/SpecialCasing.txt
+                sha256: 8d5de354eef79f2395a54c9c7dcebbaf3d30fc962d0f85611ea97aa973a0c451
 
           - name: libplacebo
             buildsystem: meson
             config-opts:
               - -Dglslang=enabled
+              - -Dvulkan=enabled
+              - -Dshaderc=enabled
+              - -Dd3d11=disabled
+              - -Ddemos=false
             sources:
               - type: git
                 url: https://github.com/haasn/libplacebo.git
@@ -186,16 +197,55 @@ modules:
                   type: git
                   tag-pattern: ^v([\d.]+)$
                 tag: v7.351.0
+              - type: patch
+                path: libplacebo_python.patch
             modules:
-              - name: glslang
+              - name: shaderc
                 buildsystem: cmake-ninja
+                builddir: true
                 config-opts:
-                  - -DBUILD_SHARED_LIBS=ON
+                  - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+                  - -DSHADERC_SKIP_EXAMPLES=ON
+                  - -DSHADERC_SKIP_TESTS=ON
+                  - -DSPIRV_SKIP_EXECUTABLES=ON
+                  - -DENABLE_GLSLANG_BINARIES=OFF
                 cleanup:
                   - /bin
                   - /include
                   - /lib/cmake
+                  - /lib/pkgconfig
                 sources:
-                  - type: archive
-                    url: https://github.com/KhronosGroup/glslang/archive/refs/tags/11.12.0.tar.gz
-                    sha256: 7795a97450fecd9779f3d821858fbc2d1a3bf1dd602617d95b685ccbcabc302f
+                  - type: git
+                    url: https://github.com/google/shaderc.git
+                    tag: v2025.5
+                    commit: c4b0af6c3664cd8b33ffddf452514e02a173b4d6
+                    x-checker-data:
+                      type: git
+                      tag-pattern: ^v(\d{4}\.\d{1,2})$
+
+                  - type: git
+                    url: https://github.com/KhronosGroup/SPIRV-Headers.git
+                    tag: vulkan-sdk-1.4.335.0
+                    commit: b824a462d4256d720bebb40e78b9eb8f78bbb305
+                    dest: third_party/spirv-headers
+                    x-checker-data:
+                      type: git
+                      tag-pattern: ^vulkan-sdk-([\d.]+)$
+
+                  - type: git
+                    url: https://github.com/KhronosGroup/SPIRV-Tools.git
+                    tag: vulkan-sdk-1.4.335.0
+                    commit: 262bdab48146c937467f826699a40da0fdfc0f1a
+                    dest: third_party/spirv-tools
+                    x-checker-data:
+                      type: git
+                      tag-pattern: ^vulkan-sdk-([\d.]+)$
+
+                  - type: git
+                    url: https://github.com/KhronosGroup/glslang.git
+                    tag: vulkan-sdk-1.4.335.0
+                    commit: b5782e52ee2f7b3e40bb9c80d15b47016e008bc9
+                    dest: third_party/glslang
+                    x-checker-data:
+                      type: git
+                      tag-pattern: ^vulkan-sdk-([\d.]+)$
