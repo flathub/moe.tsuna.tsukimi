@@ -5,11 +5,6 @@ sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
   - org.freedesktop.Sdk.Extension.llvm21
-add-extensions:
-  org.freedesktop.Platform.ffmpeg-full:
-    version: "25.08"
-    directory: lib/ffmpeg
-    add-ld-path: .
 command: tsukimi
 finish-args:
   - --device=dri
