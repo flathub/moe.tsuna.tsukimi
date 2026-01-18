@@ -23,8 +23,6 @@ cleanup:
   - /share/pkgconfig
   - "*.la"
   - "*.a"
-cleanup-commands:
-  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm21/bin
   env:
