@@ -1,10 +1,10 @@
 id: moe.tsuna.tsukimi
 runtime: org.gnome.Platform
-runtime-version: '49'
+runtime-version: '50'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
-  - org.freedesktop.Sdk.Extension.llvm21
+  - org.freedesktop.Sdk.Extension.llvm22
 command: tsukimi
 finish-args:
   - --device=dri
@@ -24,7 +24,7 @@ cleanup:
   - '*.la'
   - '*.a'
 build-options:
-  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm21/bin
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm22/bin
   env:
     CARGO_HOME: /run/build/tsukimi/cargo
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
