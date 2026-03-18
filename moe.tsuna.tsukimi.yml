@@ -190,8 +190,6 @@ modules:
                   type: git
                   tag-pattern: ^v([\d.]+)$
                 tag: v7.360.1
-              - type: patch
-                path: libplacebo_python.patch
             modules:
               - name: shaderc
                 buildsystem: cmake-ninja
