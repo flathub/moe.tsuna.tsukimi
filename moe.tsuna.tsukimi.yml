@@ -67,7 +67,7 @@ modules:
           - -Dcplayer=false
           - -Dbuild-date=false
           - -Dalsa=disabled
-          - -Dlua=enabled
+          - -Dlua=disabled
         sources:
           - type: archive
             url: https://github.com/mpv-player/mpv/archive/v0.41.0.tar.gz
@@ -80,8 +80,6 @@ modules:
               is-important: true
 
         modules:
-          - shared-modules/lua5.1/lua-5.1.5.json
-
           - name: libass
             cleanup:
               - /lib/*.la
