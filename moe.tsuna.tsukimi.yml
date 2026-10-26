@@ -41,8 +41,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/tsukinaha/tsukimi.git
-        tag: v26.9.2
-        commit: a4b8db071ae14fd93da328f9b124855be637f695
+        tag: v26.10.1
+        commit: 26a0783ef6b8494f4f6ead1b93e29d51c0a5dd0d
         x-checker-data:
           type: git
           version-scheme: semantic
@@ -170,8 +170,8 @@ modules:
             sources:
               - type: git
                 url: https://github.com/haasn/libplacebo.git
-                commit: cee9b076f2c63104ccfd497fa79c39a867293ec4
+                commit: 275f7dea27924cdd34ab2e6c20e448b6bc4fab65
                 x-checker-data:
                   type: git
                   tag-pattern: ^v([\d.]+)$
-                tag: v7.360.1
+                tag: v7.387.0
