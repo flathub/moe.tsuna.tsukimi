@@ -41,8 +41,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/tsukinaha/tsukimi.git
-        tag: v26.10.1
-        commit: 26a0783ef6b8494f4f6ead1b93e29d51c0a5dd0d
+        tag: v26.11.1
+        commit: b83d81e90746ec55a1675c403fb4af9f5b04388c
         x-checker-data:
           type: git
           version-scheme: semantic
@@ -95,7 +95,8 @@ modules:
                   type: anitya
                   project-id: 1560
                   stable-only: true
-                  url-template: https://github.com/libass/libass/releases/download/$version/libass-$version.tar.xz
+                  url-template: 
+                    https://github.com/libass/libass/releases/download/$version/libass-$version.tar.xz
 
           - name: uchardet
             buildsystem: cmake-ninja
